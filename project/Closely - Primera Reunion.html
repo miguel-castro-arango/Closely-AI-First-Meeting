@@ -209,20 +209,19 @@
      was ever revealed — the rest export blank. Force ALL animated/hidden
      content fully visible and static for print so every slide renders. */
   @media print{
-    [data-reveal],
-    .mat-col, .mat-line,
-    .orbit-core, .orbit-ring, .orbit-icon, .orbit-label,
-    .slide:not([data-deck-active]) .orbit-core,
-    .slide:not([data-deck-active]) .orbit-ring,
-    .slide:not([data-deck-active]) .orbit-icon,
-    .slide:not([data-deck-active]) .orbit-label,
-    .slide:not([data-deck-active]) .mat-col,
-    .slide:not([data-deck-active]) .mat-line{
+    /* make everything visible + stop animations everywhere */
+    [data-reveal], .mat-col, .mat-line,
+    .orbit-core, .orbit-ring, .orbit-icon, .orbit-label, .orbit-core-glow{
       opacity:1 !important;
-      transform:none !important;
       animation:none !important;
       transition:none !important;
     }
+    /* reveals reset transform to none (they only translate/scale to enter) */
+    [data-reveal], .mat-col, .orbit-icon, .orbit-label{transform:none !important;}
+    /* but the orbit rings + core are POSITIONED with translate(-50%,-50%) —
+       must keep that or they fly off-center / disappear. Restore the centered
+       transform (drop only the animation's scale). */
+    .orbit-ring, .orbit-core{transform:translate(-50%,-50%) !important;}
     /* the timeline base line is drawn with scaleX — keep it full width */
     .mat-line{transform:translateY(-50%) scaleX(1) !important;}
     /* the tension fill (slide-2 legacy) and pulse dots, if present */
