@@ -222,6 +222,11 @@
        must keep that or they fly off-center / disappear. Restore the centered
        transform (drop only the animation's scale). */
     .orbit-ring, .orbit-core{transform:translate(-50%,-50%) !important;}
+    /* the outer ring (620px) is taller than its 470px wrap and overflows top
+       & bottom; some print pipelines clip that. Let the orbit area + slide
+       overflow show so the full circle prints. */
+    .orbit-wrap{overflow:visible !important;}
+    .orbit-ring{opacity:.9 !important;}
     /* the timeline base line is drawn with scaleX — keep it full width */
     .mat-line{transform:translateY(-50%) scaleX(1) !important;}
     /* the tension fill (slide-2 legacy) and pulse dots, if present */
