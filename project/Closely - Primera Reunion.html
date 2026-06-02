@@ -744,6 +744,35 @@
     const a = deck.querySelector('[data-deck-active]');
     if(a){ clearInterval(_poll); activate(a); }
   }, 80);
+
+  // ── PDF export: settle every slide to its final state ──────────────────
+  // The reveal + counter animations only run for the slide you've navigated
+  // to, so a Save-as-PDF (which lays out all slides at once) would export the
+  // others with counters frozen at 0 and reveals mid-flight. On beforeprint,
+  // snap ALL counters to their target and clear reveal transforms across the
+  // whole deck so every page prints fully populated.
+  function settleAllForPrint(){
+    document.querySelectorAll('[data-count]').forEach(el=>{
+      const target=parseFloat(el.getAttribute('data-count'));
+      const dec=parseInt(el.getAttribute('data-decimals')||'0',10);
+      const pre=el.getAttribute('data-prefix')||'';
+      const suf=el.getAttribute('data-suffix')||'';
+      el.textContent=pre+target.toFixed(dec)+suf;
+    });
+    document.querySelectorAll('[data-reveal]').forEach(el=>{
+      el.style.transition='none';el.style.opacity='1';el.style.transform='none';
+    });
+    document.querySelectorAll('.tension-fill').forEach(el=>{
+      el.style.transition='none';el.style.transform='scaleX(1)';
+    });
+  }
+  window.addEventListener('beforeprint', settleAllForPrint);
+  // Safari/Chrome print-to-PDF via the print media query (some flows don't
+  // fire beforeprint reliably) — also settle when the print MQ matches.
+  if(window.matchMedia){
+    const mq=window.matchMedia('print');
+    (mq.addEventListener?mq.addEventListener.bind(mq,'change'):mq.addListener.bind(mq))(e=>{ if(e.matches) settleAllForPrint(); });
+  }
 })();
 </script>
 </body>
