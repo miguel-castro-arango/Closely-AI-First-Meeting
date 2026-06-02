@@ -1,0 +1,30 @@
+<!-- @dsCard group="Type" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);padding:24px 30px;}
+  .tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);}
+  .chip{font-family:var(--font-mono);font-size:11px;border:1px solid var(--border);background:var(--bg-elev);border-radius:4px;padding:3px 7px;color:var(--muted);}
+  .acc{color:var(--accent);}
+  .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+</style>
+</head>
+<body>
+  <div style="display:flex;flex-direction:column;gap:13px;">
+    <div class="cl-eyebrow">HOW IT WORKS</div>
+    <div class="row">
+      <span class="chip">CAM-02 · Back Door</span>
+      <span class="chip">14:32:14</span>
+      <span class="chip"><span class="acc">●</span> ANALYZING</span>
+      <span class="chip">CONF 94%</span>
+      <span class="chip">1920×1080 · 30fps</span>
+    </div>
+    <div class="chip" style="align-self:flex-start;">$ closely connect --nvr dahua://192.168.1.10</div>
+    <div class="tag">Geist Mono · eyebrows (0.18em), timestamps, camera IDs, pipeline labels, terminal &amp; stats</div>
+  </div>
+</body>
+</html>

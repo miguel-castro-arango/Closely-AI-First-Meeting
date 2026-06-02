@@ -1,0 +1,25 @@
+<!-- @dsCard group="Colors" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-mono);padding:22px 26px;}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .sw{border-radius:10px;height:64px;border:1px solid var(--border);display:flex;align-items:flex-end;padding:8px;}
+  .name{font-size:10.5px;color:var(--fg-strong);margin-top:7px;}
+  .hex{font-size:9.5px;color:var(--muted);}
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div><div class="sw" style="background:#0A0B14;"></div><div class="name">bg</div><div class="hex">#0A0B14</div></div>
+    <div><div class="sw" style="background:#11131F;"></div><div class="name">bg-elev</div><div class="hex">#11131F</div></div>
+    <div><div class="sw" style="background:#11131F99;"></div><div class="name">bg-card</div><div class="hex">rgba 0.6</div></div>
+    <div><div class="sw" style="background:#1E2233;"></div><div class="name">border</div><div class="hex">#1E2233</div></div>
+    <div><div class="sw" style="background:#2A2F45;"></div><div class="name">border-strong</div><div class="hex">#2A2F45</div></div>
+  </div>
+</body>
+</html>

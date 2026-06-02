@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Closely — UI Kit</title>
+<link rel="stylesheet" href="../../colors_and_type.css">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);-webkit-font-smoothing:antialiased;font-feature-settings:"ss01","cv11";}
+  ::selection{background:var(--accent);color:#fff;}
+  a{color:inherit;}
+
+  /* ping animation */
+  @keyframes cl-ping{75%,100%{transform:scale(2.2);opacity:0;}}
+  .cl-ping{animation:cl-ping 1.5s cubic-bezier(0,0,.2,1) infinite;}
+  @keyframes cl-fade-in{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+  .cl-fade-in{animation:cl-fade-in .35s ease both;}
+  @keyframes cl-detpulse{0%,100%{opacity:.7;}50%{opacity:1;}}
+  .cl-detbox{animation:cl-detpulse 2.2s ease-in-out infinite;}
+
+  .cl-navlink:hover{color:var(--fg)!important;}
+  .cl-btn-primary:hover{filter:brightness(1.1);}
+  .cl-btn-primary:active{filter:brightness(.95);}
+  .cl-btn-secondary:hover{border-color:var(--accent-line)!important;}
+  .cl-btn-ghost:hover{color:var(--fg)!important;background:rgba(17,19,32,0.4)!important;}
+  .cl-incident{transition:border-color .2s;}
+  .cl-incident:hover{border-color:var(--border-strong);}
+
+  /* responsive grids */
+  .cl-dash-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:12px;}
+  .cl-agent-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:center;}
+  .cl-cards-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  .cl-cards-2{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;}
+  .cl-footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;}
+  @media(max-width:900px){
+    .cl-dash-grid,.cl-agent-grid,.cl-cards-3,.cl-cards-2{grid-template-columns:1fr;}
+    .cl-footer-grid{grid-template-columns:1fr 1fr;}
+    .cl-navlinks{display:none!important;}
+  }
+  html{scroll-behavior:smooth;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="primitives.jsx"></script>
+<script type="text/babel" src="Nav.jsx"></script>
+<script type="text/babel" src="Dashboard.jsx"></script>
+<script type="text/babel" src="Hero.jsx"></script>
+<script type="text/babel" src="Agents.jsx"></script>
+<script type="text/babel" src="Sections.jsx"></script>
+<script type="text/babel">
+  const { Nav, Hero, Clients, Problem, HowItWorks, Agents, Differentiators, Metrics, Comparison, Faq, FinalCta, Footer } = window;
+  function App() {
+    return (
+      <React.Fragment>
+        <Nav />
+        <main>
+          <Hero />
+          <Clients />
+          <Problem />
+          <HowItWorks />
+          <Agents />
+          <Metrics />
+          <Differentiators />
+          <Comparison />
+          <Faq />
+          <FinalCta />
+        </main>
+        <Footer />
+      </React.Fragment>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

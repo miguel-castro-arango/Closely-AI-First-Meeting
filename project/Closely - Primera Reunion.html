@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Closely — Primera Reunión</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="deck/deck-styles.css">
+<style>
+  /* Team photos — circular, same footprint as the original image-slots */
+  .team-photo{width:108px;height:108px;flex-shrink:0;border-radius:50%;object-fit:cover;
+    border:1px solid var(--border-strong);}
+  /* Experience logos — the source logos are mixed dark/colored on white, so
+     show each original (no color filter) on its own translucent white plate.
+     The plate gives every logo a consistent light background and lets the
+     near-black canvas show through slightly. */
+  .exp-logo{height:80px;width:auto;object-fit:contain;
+    background:rgba(255,255,255,0.92);padding:14px 26px;border-radius:14px;
+    border:1px solid var(--border-strong);}
+  /* McKinsey's source PNG had heavy whitespace baked around the wordmark; it
+     now uses a pre-cropped copy (mckinsey-cropped.png) so it fills the plate
+     at the shared height like every other logo — no per-logo override needed. */
+  /* Client logos card — one translucent-white plate behind ALL the client
+     logos (not per-logo). Logos render in their original color (grayscale
+     removed) so they read against the light plate, sized to fill the space. */
+  .clients-card{gap:28px 36px !important;padding:32px 36px !important;
+    background:rgba(255,255,255,0.92) !important;border-color:rgba(255,255,255,0.25) !important;}
+  .clients-card .logo-img{height:auto;max-height:128px;width:100%;max-width:100%;
+    filter:none;opacity:1;}
+  /* security-shops spans both columns and sits centered on its own row. */
+  .clients-card .logo-span2{grid-column:1 / -1;justify-self:center;max-width:80%;max-height:112px;}
+
+  /* Slide 5 result-card icons — large, modern circular badge with a brand
+     gradient fill, glow ring and a bright icon. */
+  .result-ibox{width:92px;height:92px;border-radius:50%;display:grid;place-items:center;
+    margin-bottom:28px;flex-shrink:0;
+    background:linear-gradient(145deg, rgba(59,130,246,0.22), rgba(99,102,241,0.10));
+    border:1px solid var(--accent-line);
+    box-shadow:0 0 0 7px rgba(59,130,246,0.06), 0 0 44px -8px rgba(59,130,246,0.55),
+               0 1px 0 rgba(255,255,255,0.08) inset;}
+  .result-ibox .icon{width:48px;height:48px;color:var(--accent-3);stroke-width:2;}
+
+  /* ── Slide 2 maturity curve ───────────────────────────────────────────── */
+  .mat-head{text-align:center;display:flex;flex-direction:column;align-items:center;}
+  .mat-ibox{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;
+    background:rgba(17,19,32,0.7);border:1px solid var(--border-strong);color:var(--muted-strong);
+    margin-bottom:12px;}
+  .mat-ibox .icon{width:24px;height:24px;}
+  .mat-ibox-on{border-color:var(--accent-line);color:var(--accent);
+    background:rgba(59,130,246,0.10);box-shadow:0 0 24px -8px rgba(59,130,246,0.5);}
+  .mat-era{font-family:var(--font-mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);margin-bottom:6px;}
+  .mat-era-now{color:var(--accent);}
+  .mat-title{font-family:var(--font-display);text-transform:uppercase;font-weight:600;
+    font-size:21px;letter-spacing:-.01em;color:var(--fg-strong);line-height:1.1;}
+  .mat-sub{font-size:16px;color:var(--muted);margin-top:8px;line-height:1.4;}
+  .mat-node-wrap{display:grid;place-items:center;}
+  .mat-node{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+    font-family:var(--font-display);font-weight:600;font-size:18px;color:var(--muted-strong);
+    background:var(--bg-elev);border:1px solid var(--border-strong);}
+  .mat-node-mid{color:#fff;background:rgba(99,102,241,0.35);border-color:var(--accent-2);}
+  .mat-node-on{color:#fff;background:var(--brand-gradient);border-color:transparent;
+    box-shadow:0 0 0 5px rgba(59,130,246,0.12), 0 0 24px -4px rgba(59,130,246,0.7);}
+  .mat-ops{text-align:center;display:flex;flex-direction:column;gap:9px;align-items:center;}
+  .mat-eyebrow{font-family:var(--font-mono);font-size:14px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);}
+  .mat-op{display:inline-flex;align-items:center;gap:9px;font-size:17px;color:var(--muted-strong);
+    line-height:1.25;text-align:left;}
+  .mat-op .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+  .mat-op-closely{color:var(--fg-strong);font-weight:600;font-size:16px;margin-top:4px;}
+  /* operator logo chips — each logo on a small white rounded plate so the
+     mixed-background brand logos stay legible on the dark canvas. */
+  .op-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;}
+  .op-chip{display:inline-grid;place-items:center;height:58px;width:148px;padding:8px 16px;
+    border-radius:11px;background:#fff;border:1px solid var(--border-strong);}
+  .op-chip img{max-height:42px;max-width:100%;object-fit:contain;}
+  /* Closely wordmark rendered as a chip to match the operator logos — but
+     branded (dark gradient fill + accent ring + glow) so it clearly reads as
+     "this is us / the target position", not just another operator. */
+  .op-chip-closely{width:auto;min-width:148px;white-space:nowrap;
+    grid-auto-flow:column;padding:8px 20px;
+    font-family:var(--font-display);text-transform:uppercase;font-weight:600;
+    font-size:18px;letter-spacing:.01em;color:#fff;
+    background:linear-gradient(135deg, #11131F 0%, #0A0B14 100%);
+    border:1.5px solid var(--accent);
+    box-shadow:0 0 0 4px rgba(59,130,246,0.14), 0 0 32px -4px rgba(59,130,246,0.85);}
+  .op-chip-closely b{color:var(--accent);font-weight:600;margin-left:3px;}
+
+  /* ── Slide 2 chronological timeline animation ─────────────────────────
+     The base line grows L→R, then each stage column (header + node +
+     operators, grouped by --s) fades up in chronological order. */
+  .slide:not([data-deck-active]) .mat-col{opacity:0;}
+  .slide:not([data-deck-active]) .mat-line{transform:translateY(-50%) scaleX(0);}
+  @keyframes mat-line-grow{from{transform:translateY(-50%) scaleX(0);}to{transform:translateY(-50%) scaleX(1);}}
+  @keyframes mat-col-in{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+  .slide[data-deck-active] .mat-line{transform-origin:left center;
+    animation:mat-line-grow 1.5s cubic-bezier(.16,1,.3,1) .3s both;}
+  .slide[data-deck-active] .mat-col{
+    animation:mat-col-in .55s cubic-bezier(.16,1,.3,1) both;
+    animation-delay:calc(.3s + var(--s,1) * .26s);}
+  @media (prefers-reduced-motion: reduce){
+    .slide[data-deck-active] .mat-col,.slide[data-deck-active] .mat-line{animation:none;opacity:1;transform:translateY(-50%) scaleX(1);}
+    .slide[data-deck-active] .mat-col{transform:none;}
+  }
+
+  /* Slide 2 KPI evolution table — 2 rows × 5 stage columns.
+     A leading label column (200px) holds the KPI name; the 5 stage columns
+     mirror the timeline above. */
+  .kpi-tr{display:grid;grid-template-columns:200px repeat(5,1fr);gap:0;
+    border-top:1px solid var(--border);}
+  .kpi-tr:first-of-type{border-top:none;}
+  .kpi-th{padding:14px 14px 14px 8px;display:flex;flex-direction:column;justify-content:center;
+    border-right:1px solid var(--border);}
+  .kpi-th-label{font-size:17px;font-weight:600;color:var(--fg-strong);line-height:1.2;}
+  .kpi-th-note{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);margin-top:4px;}
+  .kpi-td{padding:14px 16px;display:flex;flex-direction:column;gap:4px;
+    border-right:1px solid var(--border);}
+  .kpi-td:last-child{border-right:none;}
+  .kpi-td .kpi-val{font-family:var(--font-display);font-weight:600;font-size:22px;letter-spacing:-.01em;
+    color:var(--fg-strong);line-height:1.05;}
+  .kpi-td span{font-size:13.5px;color:var(--muted);line-height:1.35;}
+  .kpi-td-on{background:linear-gradient(180deg, rgba(59,130,246,0.10), rgba(59,130,246,0.02));}
+
+  /* Slide 5 metrics band — one translucent dashboard strip; cells split by
+     vertical hairlines, numbers in the brand gradient, with a soft top glow. */
+  .metrics-band{display:grid;grid-template-columns:repeat(4,1fr);
+    border-radius:18px;border:1px solid var(--border-strong);overflow:hidden;
+    background:linear-gradient(180deg, rgba(59,130,246,0.07), rgba(17,19,32,0.55));
+    box-shadow:var(--shadow-card), 0 0 50px -16px rgba(59,130,246,0.4);}
+  .metric-cell{padding:26px 32px;border-left:1px solid var(--border);}
+  .metric-cell:first-child{border-left:none;}
+  .metric-cell .stat-num{line-height:1;}
+  .metric-label{font-size:18px;color:var(--muted-strong);margin-top:10px;line-height:1.4;}
+
+  /* ── Slide 4 orbital diagram ──────────────────────────────────────────
+     Closely core at center; 5 business value props positioned around it. */
+  .orbit-wrap{position:absolute;inset:0;margin:auto;width:1180px;height:470px;}
+  .orbit-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    border:1px solid var(--border);border-radius:50%;pointer-events:none;
+    box-shadow:0 0 60px -20px rgba(59,130,246,0.25) inset;}
+  .orbit-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+    width:215px;height:215px;border-radius:50%;display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 40%, rgba(17,19,32,0.95), rgba(10,11,20,0.9));
+    border:1px solid var(--accent-line);box-shadow:var(--ring-accent),0 30px 80px -30px rgba(0,0,0,0.8);}
+  .orbit-core-glow{position:absolute;inset:-2px;border-radius:50%;
+    background:radial-gradient(circle at 50% 45%, rgba(59,130,246,0.28), transparent 62%);
+    filter:blur(6px);}
+  .orbit-node{position:absolute;transform:translate(-50%,-50%);display:flex;gap:18px;
+    align-items:center;width:max-content;}
+  .orbit-icon{width:64px;height:64px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;
+    background:rgba(17,19,32,0.92);border:1px solid var(--accent-line);color:var(--accent);
+    box-shadow:0 0 28px -8px rgba(59,130,246,0.5);}
+  .orbit-icon .icon{width:32px;height:32px;}
+  /* glassmorphism text card — translucent, blurred, subtle hairline + glow */
+  .orbit-label{width:320px;padding:18px 22px;border-radius:16px;
+    background:rgba(17,19,32,0.38);border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    box-shadow:0 1px 0 rgba(255,255,255,0.05) inset, 0 18px 40px -24px rgba(0,0,0,0.7);}
+  .orbit-label b{display:block;font-family:var(--font-sans);font-weight:600;font-size:23px;
+    color:var(--fg-strong);line-height:1.2;}
+  .orbit-label p{margin:7px 0 0;font-size:17px;line-height:1.5;color:var(--muted-strong);}
+  .orbit-node.dir-up{flex-direction:column-reverse;align-items:center;text-align:center;}
+  .orbit-node.dir-up .orbit-label{width:340px;}
+  .orbit-node.dir-right{flex-direction:row;text-align:left;}
+  .orbit-node.dir-left{flex-direction:row-reverse;text-align:right;}
+
+  /* ── Slide 4 cinematic entrance ───────────────────────────────────────
+     Animations are armed only while the slide is active so they replay on
+     every visit. Core scales in, rings pulse outward like radar, the icons
+     pop onto the ring, and each glass card slides outward from the core. */
+  .slide:not([data-deck-active]) .orbit-core,
+  .slide:not([data-deck-active]) .orbit-ring,
+  .slide:not([data-deck-active]) .orbit-icon,
+  .slide:not([data-deck-active]) .orbit-label{opacity:0;}
+
+  @keyframes orb-core-in{0%{opacity:0;transform:translate(-50%,-50%) scale(.6);}
+    60%{opacity:1;transform:translate(-50%,-50%) scale(1.06);}
+    100%{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+  @keyframes orb-ring-in{0%{opacity:0;transform:translate(-50%,-50%) scale(.4);}
+    100%{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+  @keyframes orb-icon-in{0%{opacity:0;transform:scale(.3);}
+    65%{opacity:1;transform:scale(1.18);}100%{opacity:1;transform:scale(1);}}
+  @keyframes orb-card-r{0%{opacity:0;transform:translateX(-40px);}100%{opacity:1;transform:none;}}
+  @keyframes orb-card-l{0%{opacity:0;transform:translateX(40px);}100%{opacity:1;transform:none;}}
+
+  .slide[data-deck-active] .orbit-core{animation:orb-core-in .9s cubic-bezier(.16,1,.3,1) .15s both;}
+  .slide[data-deck-active] .orbit-core-glow{animation:cl-detpulse 2.6s ease-in-out 1s infinite;}
+  .slide[data-deck-active] .orbit-ring{animation:orb-ring-in 1s cubic-bezier(.16,1,.3,1) both;}
+  .slide[data-deck-active] .orbit-ring:nth-of-type(1){animation-delay:.35s;}
+  .slide[data-deck-active] .orbit-ring:nth-of-type(2){animation-delay:.5s;}
+  /* icon + card share the node's --d so each node lands as a unit, staggered
+     alternately L/R by the inline --d set on every .orbit-node below. */
+  .slide[data-deck-active] .orbit-icon{animation:orb-icon-in .55s cubic-bezier(.34,1.56,.64,1) both;
+    animation-delay:var(--d,0s);}
+  .slide[data-deck-active] .orbit-node.dir-right .orbit-label{animation:orb-card-r .6s cubic-bezier(.16,1,.3,1) both;
+    animation-delay:calc(var(--d,0s) + .12s);}
+  .slide[data-deck-active] .orbit-node.dir-left .orbit-label{animation:orb-card-l .6s cubic-bezier(.16,1,.3,1) both;
+    animation-delay:calc(var(--d,0s) + .12s);}
+  @media (prefers-reduced-motion: reduce){
+    .slide[data-deck-active] .orbit-core,.slide[data-deck-active] .orbit-ring,
+    .slide[data-deck-active] .orbit-icon,.slide[data-deck-active] .orbit-label{animation:none;opacity:1;}
+  }
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+  <!-- ============ SLIDE 1 — QUIÉNES SOMOS ============ -->
+  <section class="slide" data-label="Quiénes somos">
+    <div class="bg-glow"></div><div class="bg-grid"></div>
+    <div class="brandmark">Closely<b>AI</b></div>
+    <div class="pagenum">01 / 06</div>
+    <div class="inner">
+      <!-- header -->
+      <div data-reveal="up" style="--d:.05s">
+        <div class="kicker">Quiénes somos</div>
+        <h1 class="title t-lg" style="margin-top:18px;">Somos <span class="gradient">Closely.</span></h1>
+        <p class="subtitle" style="margin-top:14px;">Agentes de inteligencia artificial para operaciones de seguridad física.</p>
+      </div>
+
+      <!-- middle row -->
+      <div style="display:grid;grid-template-columns:1fr 1px 0.46fr;gap:40px;margin-top:28px;flex:1;min-height:0;">
+        <!-- team -->
+        <div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
+            <!-- profile 1 -->
+            <div data-reveal="up" style="--d:.15s;display:flex;gap:18px;">
+              <img class="team-photo" src="assets/team/Miguel Estruch LinkedIn.jpg" alt="Miguel Estruch Ferrando">
+              <div>
+                <div style="font-size:22px;font-weight:600;color:var(--fg-strong);line-height:1.15;">Miguel Estruch Ferrando</div>
+                <div class="chip" style="margin-top:6px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);">CEO &amp; Cofundador</div>
+                <ul style="margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;">
+                  <li style="font-size:20px;color:var(--muted-strong);line-height:1.4;"><b style="color:var(--fg-strong);font-weight:600;">McKinsey</b> — Experto en proyectos de seguridad y riesgo</li>
+                  <li style="font-size:20px;color:var(--muted-strong);line-height:1.4;"><b style="color:var(--fg-strong);font-weight:600;">Harvard University</b> — MBA</li>
+                  <li style="font-size:20px;color:var(--muted-strong);line-height:1.4;"><b style="color:var(--fg-strong);font-weight:600;">Expertise legal/regulatorio</b> — Mejor estudiante de Derecho en España en 2021</li>
+                </ul>
+              </div>
+            </div>
+            <!-- profile 2 -->
+            <div data-reveal="up" style="--d:.15s;display:flex;gap:18px;">
+              <img class="team-photo" src="assets/team/Miguel Castro LinkedIn.jpg" alt="Miguel Castro Arango">
+              <div>
+                <div style="font-size:22px;font-weight:600;color:var(--fg-strong);line-height:1.15;">Miguel Castro Arango</div>
+                <div class="chip" style="margin-top:6px;background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);">CTO &amp; Cofundador</div>
+                <ul style="margin:14px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px;">
+                  <li style="font-size:20px;color:var(--muted-strong);line-height:1.4;"><b style="color:var(--fg-strong);font-weight:600;">Treinta (YC)</b> — Escaló la compañía a 10M de usuarios en 23 países</li>
+                  <li style="font-size:20px;color:var(--muted-strong);line-height:1.4;"><b style="color:var(--fg-strong);font-weight:600;">Universidad de Los Andes</b> — Ingeniería Industrial &amp; Matemática Computacional</li>
+                  <li style="font-size:20px;color:var(--muted-strong);line-height:1.4;"><b style="color:var(--fg-strong);font-weight:600;">Arthur D. Little</b> — Experto en tecnología e Inteligencia Artificial</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- experience logos -->
+          <div data-reveal="up" style="--d:.3s;margin-top:24px;">
+            <div class="source" style="margin-bottom:14px;">Experiencia previa del equipo</div>
+            <div style="display:flex;flex-wrap:wrap;gap:14px 24px;align-items:center;">
+              <img class="exp-logo" src="assets/experience/mckinsey-cropped.png" alt="McKinsey &amp; Company">
+              <img class="exp-logo" src="assets/experience/Harvard_University_logo.svg.png" alt="Harvard University">
+              <img class="exp-logo" src="assets/experience/Harvard_Innovation_Lab_logo.png" alt="Harvard innovation labs">
+              <img class="exp-logo" src="assets/experience/Treinta Logo.png" alt="Treinta">
+              <img class="exp-logo" src="assets/experience/YCombinator.png" alt="Y Combinator">
+              <img class="exp-logo" src="assets/experience/Arthur D Little Logo.jpg" alt="Arthur D. Little">
+            </div>
+          </div>
+        </div>
+
+        <div class="vrule"></div>
+
+        <!-- clients -->
+        <div data-reveal="up" style="--d:.4s;display:flex;flex-direction:column;">
+          <div class="kicker" style="font-size:18px;letter-spacing:.18em;">Empresas que ya operan con Closely</div>
+          <div class="card clients-card" style="margin-top:18px;display:grid;grid-template-columns:1fr 1fr;align-items:center;flex:1;">
+            <img class="logo-img" src="assets/clients/instaseg.png" alt="Instaseg">
+            <img class="logo-img" src="assets/clients/seguridad-g2.png" alt="G2 Seguridad">
+            <img class="logo-img" src="assets/clients/national-security.png" alt="National Security">
+            <img class="logo-img" src="assets/clients/pintalba.png" alt="Pintalba Tecnología">
+            <img class="logo-img logo-span2" src="assets/clients/security-shops.png" alt="Security Shops">
+          </div>
+        </div>
+      </div>
+
+      <!-- metrics row -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:28px;">
+        <div class="card" data-reveal="up" style="--d:.5s;padding:26px 32px;display:flex;align-items:baseline;gap:20px;">
+          <div class="stat-num gradient" style="font-size:74px;" data-count="32" data-prefix="+" data-suffix="%">+0%</div>
+          <div style="font-size:22px;color:var(--muted-strong);line-height:1.35;">más propuestas comerciales vendidas</div>
+        </div>
+        <div class="card" data-reveal="up" style="--d:.62s;padding:26px 32px;display:flex;align-items:baseline;gap:20px;">
+          <div class="stat-num gradient" style="font-size:74px;" data-count="90" data-prefix="−" data-suffix="%">−0%</div>
+          <div style="font-size:22px;color:var(--muted-strong);line-height:1.35;">reducción en costos de monitoreo</div>
+        </div>
+        <div class="card" data-reveal="up" style="--d:.74s;padding:26px 32px;display:flex;align-items:baseline;gap:20px;">
+          <div class="stat-num gradient" style="font-size:74px;" data-count="12" data-suffix="×">0×</div>
+          <div style="font-size:22px;color:var(--muted-strong);line-height:1.35;">más incidencias detectadas</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 2 — MATURITY CURVE / BENCHMARK ============ -->
+  <section class="slide" data-label="Benchmark">
+    <div class="bg-glow"></div><div class="bg-grid"></div>
+    <div class="brandmark">Closely<b>AI</b></div>
+    <div class="pagenum">02 / 06</div>
+    <div class="inner">
+      <!-- header -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:40px;">
+        <div data-reveal="up" style="--d:.05s;max-width:1480px;">
+          <div class="kicker">El benchmark de la industria</div>
+          <h1 class="title t-md" style="margin-top:14px;font-size:42px;line-height:1.08;">La seguridad en LATAM está pasando de horas-guardia<br><span class="gradient">a inteligencia verificada con IA.</span></h1>
+          <p class="subtitle" style="margin-top:12px;font-size:20px;">Los operadores líderes no están agregando más cámaras — están convirtiendo el video en <span style="color:var(--fg-strong);">eventos verificados, respuesta más rápida y datos para el cliente.</span></p>
+        </div>
+        <div data-reveal="up" style="--d:.12s;text-align:right;flex-shrink:0;padding-bottom:6px;">
+          <div class="chip" style="background:var(--accent-soft);border:1px solid var(--accent-line);color:var(--accent);">Visión Closely</div>
+          <div style="font-size:16px;color:var(--muted);margin-top:10px;max-width:260px;line-height:1.45;">Dónde están los operadores hoy — y hacia dónde va el mercado.</div>
+        </div>
+      </div>
+
+      <!-- maturity curve -->
+      <div data-reveal="fade" style="--d:.22s;margin-top:40px;position:relative;">
+        <!-- stage headers: icon · era · title · description -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;">
+          <div class="mat-head mat-col" style="--s:1;">
+            <div class="mat-ibox"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9 8 10 4.6-1 8-5 8-10V5Z"/></svg></div>
+            <div class="mat-era">Pre-2005</div>
+            <div class="mat-title">Guardia primero</div><div class="mat-sub">Rondas manuales<br>+ reportes en papel</div>
+          </div>
+          <div class="mat-head mat-col" style="--s:2;">
+            <div class="mat-ibox"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="10" rx="2"/><path d="M16 9l5-3v12l-5-3"/></svg></div>
+            <div class="mat-era">2005–2015</div>
+            <div class="mat-title">CCTV pasivo</div><div class="mat-sub">Video centralizado<br>+ revisión post-incidente</div>
+          </div>
+          <div class="mat-head mat-col" style="--s:3;">
+            <div class="mat-ibox"><svg class="icon" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><circle cx="12" cy="10" r="2.5"/></svg></div>
+            <div class="mat-era">2015–2022</div>
+            <div class="mat-title">Monitoreo remoto</div><div class="mat-sub">SOC + alertas por reglas<br>+ verificación humana</div>
+          </div>
+          <div class="mat-head mat-col" style="--s:4;">
+            <div class="mat-ibox mat-ibox-on"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg></div>
+            <div class="mat-era mat-era-now">Hoy</div>
+            <div class="mat-title">Operación con IA</div><div class="mat-sub">Analítica de video<br>+ triage de eventos</div>
+          </div>
+          <div class="mat-head mat-col" style="--s:5;">
+            <div class="mat-ibox mat-ibox-on"><svg class="icon" viewBox="0 0 24 24"><circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="12" r="2"/><path d="M7 6h6a4 4 0 0 1 4 4M7 18h6a4 4 0 0 0 4-4"/></svg></div>
+            <div class="mat-era mat-era-now">Emergente</div>
+            <div class="mat-title gradient">Capa de inteligencia</div><div class="mat-sub">Eventos verificados<br>+ monetización de datos</div>
+          </div>
+        </div>
+
+        <!-- axis labels -->
+        <div style="display:flex;justify-content:space-between;margin-top:18px;font-family:var(--font-mono);font-size:14px;letter-spacing:.08em;text-transform:uppercase;">
+          <span style="color:var(--muted);">Labor commoditizada</span>
+          <span style="color:var(--accent);">Capa de decisión</span>
+        </div>
+
+        <!-- timeline with numbered nodes -->
+        <div style="position:relative;margin-top:14px;height:48px;">
+          <div class="mat-line" style="position:absolute;top:50%;left:4%;right:4%;height:2px;transform:translateY(-50%);
+               background:linear-gradient(90deg, var(--border-strong) 0%, var(--accent) 100%);"></div>
+          <div style="position:absolute;top:50%;right:2.5%;transform:translateY(-50%);color:var(--accent);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg>
+          </div>
+          <div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr);">
+            <div class="mat-node-wrap mat-col" style="--s:1;"><span class="mat-node">1</span></div>
+            <div class="mat-node-wrap mat-col" style="--s:2;"><span class="mat-node">2</span></div>
+            <div class="mat-node-wrap mat-col" style="--s:3;"><span class="mat-node mat-node-mid">3</span></div>
+            <div class="mat-node-wrap mat-col" style="--s:4;"><span class="mat-node mat-node-mid">4</span></div>
+            <div class="mat-node-wrap mat-col" style="--s:5;"><span class="mat-node mat-node-on">5</span></div>
+          </div>
+        </div>
+
+        <!-- operator logos by stage (logos on white chips for legibility) -->
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin-top:20px;align-items:start;">
+          <div class="mat-ops mat-col" style="--s:1;"><span class="mat-eyebrow">Línea base histórica</span></div>
+          <div class="mat-ops mat-col" style="--s:2;"><span class="mat-eyebrow">Operadores tradicionales</span></div>
+          <div class="mat-ops mat-col" style="--s:3;">
+            <div class="op-row">
+              <span class="op-chip"><img src="assets/operators/vise.png" alt="VISE"></span>
+              <span class="op-chip"><img src="assets/operators/liderman.png" alt="Liderman"></span>
+            </div>
+          </div>
+          <div class="mat-ops mat-col" style="--s:4;">
+            <div class="op-row">
+              <span class="op-chip"><img src="assets/operators/prosegur-cropped.jpg" alt="Prosegur"></span>
+              <span class="op-chip"><img src="assets/operators/securitas.png" alt="Securitas"></span>
+            </div>
+            <div class="op-row">
+              <span class="op-chip"><img src="assets/operators/g4s.jpg" alt="G4S"></span>
+              <span class="op-chip"><img src="assets/operators/fortox-cropped.png" alt="Fortox"></span>
+            </div>
+          </div>
+          <div class="mat-ops mat-col" style="--s:5;">
+            <div class="op-row">
+              <span class="op-chip"><img src="assets/operators/palantir-cropped.jpg" alt="Palantir"></span>
+              <span class="op-chip op-chip-closely">Closely<b>AI</b></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI evolution table: 2 rows × 5 columns, aligned to the timeline -->
+      <div class="card" data-reveal="up" style="--d:.45s;margin-top:24px;padding:18px 24px;">
+        <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:12px;padding-left:8px;">
+          <div style="font-size:18px;font-weight:600;color:var(--fg-strong);">Cómo evolucionan los KPIs por etapa</div>
+          <div style="font-size:15px;color:var(--muted);">El cuello de botella pasa de "número de guardas" a "calidad de la verificación de eventos".</div>
+        </div>
+
+        <!-- row 1: Ingreso por empleado -->
+        <div class="kpi-tr">
+          <div class="kpi-th"><span class="kpi-th-label">Ingreso por empleado</span><span class="kpi-th-note">Índice relativo</span></div>
+          <div class="kpi-td"><b class="kpi-val">1.0×</b><span>Base — atado a las horas de guardia</span></div>
+          <div class="kpi-td"><b class="kpi-val">1.1–1.3×</b><span>Mejora por centralización del monitoreo</span></div>
+          <div class="kpi-td"><b class="kpi-val">1.3–1.8×</b><span>Monitoreo remoto y rondas virtuales</span></div>
+          <div class="kpi-td"><b class="kpi-val gradient">1.8–2.5×</b><span>Automatización, tableros y cobertura multi-sitio</span></div>
+          <div class="kpi-td kpi-td-on"><b class="kpi-val gradient">10×</b><span>Software, datos y analítica sin sumar nómina</span></div>
+        </div>
+
+        <!-- row 2: Monitoreo humano efectivo -->
+        <div class="kpi-tr">
+          <div class="kpi-th"><span class="kpi-th-label">Monitoreo humano efectivo</span><span class="kpi-th-note">Cámaras por operador</span></div>
+          <div class="kpi-td"><b class="kpi-val">1–4 cámaras</b><span>Sobre todo presencia humana en sitio</span></div>
+          <div class="kpi-td"><b class="kpi-val">4–12 cámaras</b><span>La detección decae al sumar pantallas</span></div>
+          <div class="kpi-td"><b class="kpi-val">Cola de alarmas</b><span>El operador verifica clips y hace rondas</span></div>
+          <div class="kpi-td"><b class="kpi-val">Cola por eventos</b><span>La IA prioriza lo que requiere criterio</span></div>
+          <div class="kpi-td kpi-td-on"><b class="kpi-val">Solo lo crítico</b><span>Verificación humana en eventos ambiguos</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 3 — HOY VS CONSECUENCIAS ============ -->
+  <section class="slide" data-label="Operación actual" style="padding:0;">
+    <div class="bg-glow"></div>
+    <div class="brandmark" style="top:44px;right:120px;">Closely<b>AI</b></div>
+    <div class="pagenum">03 / 06</div>
+    <div class="inner" style="height:100%;">
+      <!-- two tinted column backgrounds + center divider, behind the aligned grid -->
+      <div style="position:absolute;inset:0;display:grid;grid-template-columns:1fr 1px 1fr;z-index:0;">
+        <div style="background:rgba(239,68,68,0.04);"></div>
+        <div class="vrule" style="background:linear-gradient(to bottom,transparent,var(--accent-line),transparent);"></div>
+        <div style="background:rgba(59,130,246,0.04);"></div>
+      </div>
+
+      <div style="position:relative;z-index:1;height:100%;display:flex;flex-direction:column;padding:72px 120px 80px;">
+        <!-- slide action title -->
+        <div data-reveal="up" style="--d:.05s;margin-bottom:44px;">
+          <div class="kicker">El diagnóstico</div>
+          <h1 class="title t-md" style="margin-top:14px;font-size:46px;">Una industria operativa, manual y reactiva —<br><span class="gradient">donde escalar sacrifica el margen.</span></h1>
+        </div>
+        <!-- headers row -->
+        <div style="display:grid;grid-template-columns:1fr 96px 1fr;align-items:center;">
+          <div data-reveal="up" style="--d:.1s;display:flex;align-items:center;gap:16px;">
+            <div class="ibox" style="width:48px;height:48px;border-color:var(--danger-line);color:var(--danger);flex-shrink:0;"><svg class="icon" viewBox="0 0 24 24"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div><div class="kicker" style="color:var(--danger);">La operación actual</div><div class="title t-md" style="font-size:38px;margin-top:6px;">Así operan hoy</div></div>
+          </div>
+          <div></div>
+          <div data-reveal="up" style="--d:.16s;display:flex;align-items:center;gap:16px;">
+            <div class="ibox" style="width:48px;height:48px;flex-shrink:0;"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+            <div><div class="kicker">Las consecuencias reales</div><div class="title t-md" style="font-size:38px;margin-top:6px;">Lo que eso implica</div></div>
+          </div>
+        </div>
+
+        <!-- aligned rows: each grid row pairs a left + right bullet so they
+             stay vertically aligned regardless of text length -->
+        <div style="display:grid;grid-template-columns:1fr 96px 1fr;row-gap:38px;margin-top:40px;flex:1;align-content:start;">
+          <!-- row 1 -->
+          <div data-reveal="up" style="--d:.22s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--danger);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Costo fijo que no escala</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">Cada cámara nueva exige monitoreo humano. Crecer en contratos significa contratar más personas.</p></div></div>
+          <div></div>
+          <div data-reveal="right" style="--d:.22s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--accent);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><line x1="6" y1="20" x2="6" y2="14"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="18" y1="20" x2="18" y2="10"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Imposible escalar sin contratar</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">No se pueden vender más contratos sin contratar más guardas / operadores en monitoreo.</p></div></div>
+          <!-- row 2 -->
+          <div data-reveal="up" style="--d:.3s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--danger);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><polyline points="3 7 9 13 13 9 21 17"/><polyline points="15 17 21 17 21 11"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Márgenes destruidos por el salario mínimo</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">Con el ajuste 2026, el costo por operador sube sin que el cliente pague más. El éxito recae en la operación.</p></div></div>
+          <div></div>
+          <div data-reveal="right" style="--d:.3s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--accent);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Estandarización de precios</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">El costo de nómina es estándar y la vigilancia está comoditizada: ganar un contrato implica bajar precios.</p></div></div>
+          <!-- row 3 -->
+          <div data-reveal="up" style="--d:.38s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--danger);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="10" rx="2"/><path d="M16 9l5-3v12l-5-3"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Cámaras sin contexto</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">Graban todo, priorizan nada. Un operador mira +40 cámaras al tiempo, sin ayuda de tecnología preventiva.</p></div></div>
+          <div></div>
+          <div data-reveal="right" style="--d:.38s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--accent);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><line x1="3" y1="3" x2="21" y2="21"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Incidentes que se pierden</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">La detección depende de si el operador miraba la pantalla correcta en el momento correcto. Muchas veces están dormidos o distraídos.</p></div></div>
+          <!-- row 4 -->
+          <div data-reveal="up" style="--d:.46s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--danger);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Fatiga de alertas</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">El 88% de las alertas son falsas. El equipo las ignora; cuando llega una real, no se reacciona a tiempo.</p></div></div>
+          <div></div>
+          <div data-reveal="right" style="--d:.46s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--accent);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Respuesta lenta o nula</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">El tiempo entre incidente y respuesta se mide en minutos, no segundos. En seguridad, eso es la diferencia.</p></div></div>
+          <!-- row 5 -->
+          <div data-reveal="up" style="--d:.54s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--danger);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><line x1="8" y1="8" x2="16" y2="8"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="8" y1="16" x2="13" y2="16"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Documentación manual</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">Cada incidente se escribe a mano, sujeto a la interpretación del personal, sin trazabilidad ni comparabilidad.</p></div></div>
+          <div></div>
+          <div data-reveal="right" style="--d:.54s;display:flex;gap:16px;"><svg class="icon-sm" style="color:var(--accent);flex-shrink:0;margin-top:4px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg><div><b style="color:var(--fg-strong);font-size:23px;font-weight:600;">Clientes que no renuevan</b><p style="margin:5px 0 0;font-size:19px;color:var(--muted-strong);line-height:1.5;">Sin reportes ni evidencia de valor, el cliente solo ve el costo. No ve lo que se previno en esa semana o mes.</p></div></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 4 — LOS MEJORES DEL MUNDO ============ -->
+  <section class="slide" data-label="Los mejores del mundo">
+    <div class="bg-glow"></div><div class="bg-grid"></div>
+    <div class="brandmark">Closely<b>AI</b></div>
+    <div class="pagenum">04 / 06</div>
+    <div class="inner">
+      <div data-reveal="up" style="--d:.05s;max-width:1380px;">
+        <div class="kicker">Lo que están haciendo los mejores</div>
+        <h1 class="title t-md" style="margin-top:16px;">La IA en seguridad ya no es ventaja:<br><span class="gradient">es el nuevo estándar.</span></h1>
+      </div>
+
+      <!-- industry backing: the 93% stat bar -->
+      <div class="card" data-reveal="up" style="--d:.16s;margin-top:24px;padding:20px 30px;display:flex;align-items:center;gap:28px;">
+        <div class="stat-num gradient" style="font-size:54px;flex-shrink:0;" data-count="93" data-suffix="%">93%</div>
+        <div style="flex:1;">
+          <div style="font-size:19px;color:var(--fg-strong);font-weight:500;line-height:1.4;">de los directivos de seguridad planea usar tecnología para mejorar su respuesta a incidentes en los próximos 12 meses.</div>
+          <div style="font-size:18px;color:var(--muted);margin-top:4px;line-height:1.4;">#1 en presupuesto tecnológico LATAM: IA en videovigilancia y analítica (46%). Closely ya hace, hoy, lo que los mejores del mundo apenas están adoptando.</div>
+        </div>
+      </div>
+
+      <!-- orbital diagram: Closely at the center, 5 business value props around -->
+      <div data-reveal="fade" style="--d:.28s;position:relative;flex:1;min-height:0;margin-top:8px;">
+        <div class="orbit-wrap">
+          <!-- orbit rings -->
+          <div class="orbit-ring" style="width:620px;height:620px;"></div>
+          <div class="orbit-ring" style="width:390px;height:390px;"></div>
+
+          <!-- center: Closely core -->
+          <div class="orbit-core">
+            <div class="orbit-core-glow"></div>
+            <div style="position:relative;text-align:center;">
+              <div style="font-family:var(--font-display);text-transform:uppercase;font-size:26px;letter-spacing:-.01em;color:var(--fg-strong);">Closely<b style="color:var(--accent);font-weight:400;">AI</b></div>
+              <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:5px;">El sistema operativo<br>de la seguridad física</div>
+            </div>
+          </div>
+
+          <!-- 6 nodes: 3 right, 3 left, at 60° apart -->
+
+          <!-- RIGHT top (−60°) — Detección preventiva -->
+          <div class="orbit-node dir-right" style="top:6%;left:84%;--d:1.2s;">
+            <div class="orbit-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <div class="orbit-label"><b>Detección preventiva</b><p>Computer Vision 24/7 que ve la amenaza antes de que escale — no después.</p></div>
+          </div>
+
+          <!-- RIGHT middle (0°) — Escala sin nómina -->
+          <div class="orbit-node dir-right" style="top:50%;left:91%;--d:1.56s;">
+            <div class="orbit-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg></div>
+            <div class="orbit-label"><b>Escala sin nómina</b><p>Más cámaras y contratos sin contratar más operadores. El margen crece con el negocio.</p></div>
+          </div>
+
+          <!-- RIGHT bottom (60°) — Respuesta en segundos -->
+          <div class="orbit-node dir-right" style="top:94%;left:84%;--d:1.92s;">
+            <div class="orbit-icon"><svg class="icon" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+            <div class="orbit-label"><b>Respuesta en segundos</b><p>El tiempo entre incidente y acción se mide en segundos. En seguridad, eso lo es todo.</p></div>
+          </div>
+
+          <!-- LEFT top (240°) — Margen protegido -->
+          <div class="orbit-node dir-left" style="top:6%;left:16%;--d:1.38s;">
+            <div class="orbit-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9 8 10 4.6-1 8-5 8-10V5Z"/><path d="M9 12l2 2 4-4"/></svg></div>
+            <div class="orbit-label"><b>Margen protegido</b><p>Servicio diferenciado que justifica precio — sin competir solo por bajar tarifas.</p></div>
+          </div>
+
+          <!-- LEFT middle (180°) — Trazabilidad total -->
+          <div class="orbit-node dir-left" style="top:50%;left:9%;--d:1.74s;">
+            <div class="orbit-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg></div>
+            <div class="orbit-label"><b>Trazabilidad total</b><p>Cada incidente queda documentado por IA: auditable, comparable, listo para el cliente.</p></div>
+          </div>
+
+          <!-- LEFT bottom (120°) — Efectividad comercial -->
+          <div class="orbit-node dir-left" style="top:94%;left:16%;--d:2.1s;">
+            <div class="orbit-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+            <div class="orbit-label"><b>Efectividad comercial</b><p>Detección activa y reportes que demuestran valor: cierra más contratos y eleva la renovación.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 5 — RESULTADOS ============ -->
+  <section class="slide" data-label="Resultados">
+    <div class="bg-glow"></div><div class="bg-grid"></div>
+    <div class="brandmark">Closely<b>AI</b></div>
+    <div class="pagenum">05 / 06</div>
+    <div class="inner">
+      <div data-reveal="up" style="--d:.05s;">
+        <div class="kicker">Resultados</div>
+        <h1 class="title t-lg" style="margin-top:18px;">Los resultados evidenciados<br><span class="gradient">con nuestros clientes.</span></h1>
+      </div>
+
+      <!-- hero stats — grow to fill the vertical space, cards centered -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:40px;flex:1;min-height:0;">
+        <div class="card" data-reveal="up" style="--d:.2s;padding:44px 40px;display:flex;flex-direction:column;justify-content:center;">
+          <div class="result-ibox"><svg class="icon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/><polyline points="17 8 20 8 20 11"/></svg></div>
+          <div class="stat-num gradient" style="font-size:112px;" data-count="32" data-prefix="+" data-suffix="%">+0%</div>
+          <div style="font-size:22px;font-weight:600;color:var(--fg-strong);margin-top:14px;">más propuestas comerciales por mes</div>
+          <p style="font-size:20px;color:var(--muted);line-height:1.5;margin-top:14px;">Los clientes ven detección activa, no solo grabación. Eso es lo que cierra contratos.</p>
+        </div>
+        <div class="card" data-reveal="up" style="--d:.32s;padding:44px 40px;display:flex;flex-direction:column;justify-content:center;">
+          <div class="result-ibox"><svg class="icon" viewBox="0 0 24 24"><path d="M3 7l6 6 4-4 8 8"/><polyline points="21 17 21 12 16 12"/></svg></div>
+          <div class="stat-num gradient" style="font-size:112px;" data-count="90" data-prefix="−" data-suffix="%">−0%</div>
+          <div style="font-size:22px;font-weight:600;color:var(--fg-strong);margin-top:14px;">reducción en costos de monitoreo</div>
+          <p style="font-size:20px;color:var(--muted);line-height:1.5;margin-top:14px;">Un operador supervisa lo que antes requería un equipo rotativo completo.</p>
+        </div>
+        <div class="card" data-reveal="up" style="--d:.44s;padding:44px 40px;display:flex;flex-direction:column;justify-content:center;">
+          <div class="result-ibox"><svg class="icon" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div class="stat-num gradient" style="font-size:112px;" data-count="12" data-suffix="×">0×</div>
+          <div style="font-size:22px;font-weight:600;color:var(--fg-strong);margin-top:14px;">más incidencias detectadas</div>
+          <p style="font-size:20px;color:var(--muted);line-height:1.5;margin-top:14px;">Closely ve lo que el ojo humano pierde — y solo escala lo que importa.</p>
+        </div>
+      </div>
+
+      <!-- mini stats — single dashboard band with vertical dividers + glow -->
+      <div class="metrics-band" data-reveal="up" style="--d:.6s;margin-top:40px;">
+        <div class="metric-cell">
+          <div class="stat-num gradient" style="font-size:46px;"><span data-count="3000" data-prefix="+">+0</span></div>
+          <div class="metric-label">alertas detectadas en pilotos activos</div>
+        </div>
+        <div class="metric-cell">
+          <div class="stat-num gradient" style="font-size:46px;"><span data-count="250" data-prefix="+">+0</span></div>
+          <div class="metric-label">cámaras en operación activa</div>
+        </div>
+        <div class="metric-cell">
+          <div class="stat-num gradient" style="font-size:46px;"><span data-count="648">0</span></div>
+          <div class="metric-label">horas de revisión ahorradas/mes por operador</div>
+        </div>
+        <div class="metric-cell">
+          <div class="stat-num gradient" style="font-size:46px;" data-count="78" data-prefix="−" data-suffix="%">−0%</div>
+          <div class="metric-label">menos falsas alarmas desde el primer mes</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SLIDE 6 — CIERRE ============ -->
+  <section class="slide" data-label="Cierre" style="padding:0;">
+    <div class="bg-glow" style="background:radial-gradient(60% 60% at 50% 50%, rgba(59,130,246,0.16) 0%, transparent 65%), radial-gradient(40% 40% at 50% 50%, rgba(99,102,241,0.12) 0%, transparent 70%);"></div>
+    <div class="pagenum">06 / 06</div>
+    <div class="inner" style="height:100%;align-items:center;justify-content:center;text-align:center;padding:120px;">
+      <h1 class="title" style="font-size:88px;line-height:1.05;">
+        <span data-reveal="up" style="--d:.2s;display:block;">Deja de contratar humanos.</span>
+        <span data-reveal="scale" style="--d:1.5s;display:block;" class="gradient">Contrata agentes de IA.</span>
+      </h1>
+      <div data-reveal="scale" style="--d:2.4s;margin-top:64px;font-family:var(--font-display);text-transform:uppercase;font-size:96px;letter-spacing:-.01em;line-height:1;color:var(--fg-strong);">Closely<b style="color:var(--accent);font-weight:400;">AI</b></div>
+      <a href="https://www.closely.dev" data-reveal="fade" style="--d:2.8s;position:absolute;bottom:110px;left:0;right:0;margin-inline:auto;width:max-content;font-family:var(--font-mono);font-size:24px;letter-spacing:.06em;color:var(--accent);text-decoration:none;">www.closely.dev</a>
+    </div>
+  </section>
+
+</deck-stage>
+
+<script src="deck/image-slot.js"></script>
+<script src="deck/deck-stage.js"></script>
+<script>
+(function(){
+  const deck = document.querySelector('deck-stage');
+  function easeOutExpo(t){ return t===1?1:1-Math.pow(2,-10*t); }
+  function runCounter(el){
+    const target = parseFloat(el.getAttribute('data-count'));
+    const dec = parseInt(el.getAttribute('data-decimals')||'0',10);
+    const pre = el.getAttribute('data-prefix')||'';
+    const suf = el.getAttribute('data-suffix')||'';
+    const dur = 1400; const start = performance.now();
+    function tick(now){
+      const p = Math.min((now-start)/dur,1);
+      const v = target*easeOutExpo(p);
+      el.textContent = pre + v.toFixed(dec) + suf;
+      if(p<1) requestAnimationFrame(tick);
+      else el.textContent = pre + target.toFixed(dec) + suf;
+    }
+    requestAnimationFrame(tick);
+  }
+  function activate(slide){
+    // Reset all reveals across all slides
+    document.querySelectorAll('[data-reveal]').forEach(el=>{
+      el.style.transition='none';
+      el.style.opacity='';
+      el.style.transform='';
+      el.classList.remove('cl-on');
+    });
+    document.querySelectorAll('.tension-fill').forEach(el=>{
+      el.style.transition='none';
+      el.style.transform='';
+    });
+    document.querySelectorAll('.pulse-dot').forEach(el=>el.classList.remove('cl-on'));
+
+    // Force paint of hidden state, then animate in
+    requestAnimationFrame(()=>{requestAnimationFrame(()=>{
+      // Reveals
+      slide.querySelectorAll('[data-reveal]').forEach(el=>{
+        const d = parseFloat(getComputedStyle(el).getPropertyValue('--d')) || 0;
+        const ms = d * 1000 + 30;
+        setTimeout(()=>{
+          el.style.transition='opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1)';
+          el.style.opacity='1';
+          el.style.transform='none';
+        }, ms);
+      });
+      // Tension bar
+      slide.querySelectorAll('.tension-fill').forEach(el=>{
+        const d = parseFloat(getComputedStyle(el).getPropertyValue('--d')) || 0;
+        const ms = d * 1000 + 30;
+        setTimeout(()=>{
+          el.style.transition='transform 1s cubic-bezier(.16,1,.3,1)';
+          el.style.transform='scaleX(1)';
+        }, ms);
+      });
+      // Pulse dots
+      slide.querySelectorAll('.pulse-dot').forEach(el=>{
+        setTimeout(()=>el.classList.add('cl-on'), 1200);
+      });
+      // Counters
+      const counters = slide.querySelectorAll('[data-count]');
+      counters.forEach(c=>{
+        const pre=c.getAttribute('data-prefix')||'';
+        const suf=c.getAttribute('data-suffix')||'';
+        const dec=parseInt(c.getAttribute('data-decimals')||'0',10);
+        c.textContent = pre + (0).toFixed(dec) + suf;
+      });
+      setTimeout(()=>counters.forEach(runCounter), 400);
+    });});
+  }
+  deck.addEventListener('slidechange', e=>activate(e.detail.slide));
+  // slidechange fires during connectedCallback before this script runs —
+  // poll until the active slide appears, then trigger.
+  const _poll = setInterval(()=>{
+    const a = deck.querySelector('[data-deck-active]');
+    if(a){ clearInterval(_poll); activate(a); }
+  }, 80);
+})();
+</script>
+</body>
+</html>

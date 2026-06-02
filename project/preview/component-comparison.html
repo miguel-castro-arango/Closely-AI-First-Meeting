@@ -1,0 +1,31 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);padding:18px 24px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;border:1px solid var(--border);border-radius:16px;overflow:hidden;}
+  th,td{text-align:left;padding:11px 16px;border-bottom:1px solid var(--border);}
+  thead th{font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.16em;color:var(--muted);font-weight:500;background:rgba(17,19,32,0.6);}
+  thead th.acc{color:var(--accent);}
+  tbody th{font-weight:600;color:var(--fg-strong);}
+  td{color:var(--muted-strong);}
+  td.ok{color:var(--fg-strong);}
+  tr:last-child th,tr:last-child td{border-bottom:none;}
+  .ico{display:inline-flex;align-items:center;gap:8px;}
+  svg{width:14px;height:14px;}
+</style>
+</head>
+<body>
+  <table>
+    <thead><tr><th>Capability</th><th>Traditional CCTV</th><th class="acc">Closely</th></tr></thead>
+    <tbody>
+      <tr><th>Detection</th><td><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="1.75" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Passive recording</span></td><td class="ok"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Active detection</span></td></tr>
+      <tr><th>Response</th><td><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="1.75" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Manual review</span></td><td class="ok"><span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Real-time alerts</span></td></tr>
+    </tbody>
+  </table>
+</body>
+</html>

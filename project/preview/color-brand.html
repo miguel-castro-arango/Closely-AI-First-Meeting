@@ -1,0 +1,24 @@
+<!-- @dsCard group="Colors" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-mono);padding:22px 26px;}
+  .grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:12px;}
+  .sw{border-radius:10px;height:64px;border:1px solid var(--border);}
+  .name{font-size:10.5px;color:var(--fg-strong);margin-top:7px;}
+  .hex{font-size:9.5px;color:var(--muted);}
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div><div class="sw" style="background:var(--brand-gradient);box-shadow:var(--shadow-glow);"></div><div class="name">brand-gradient</div><div class="hex">#3B82F6 → #6366F1</div></div>
+    <div><div class="sw" style="background:#3B82F6;"></div><div class="name">accent</div><div class="hex">#3B82F6</div></div>
+    <div><div class="sw" style="background:#6366F1;"></div><div class="name">accent-2</div><div class="hex">#6366F1</div></div>
+    <div><div class="sw" style="background:#818CF8;"></div><div class="name">accent-3</div><div class="hex">#818CF8</div></div>
+  </div>
+</body>
+</html>

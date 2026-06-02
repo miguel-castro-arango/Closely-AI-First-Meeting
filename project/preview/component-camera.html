@@ -1,0 +1,30 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-mono);padding:18px 22px;}
+  .feed{position:relative;height:150px;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#0d1018,#070811);border:1px solid var(--border);box-shadow:inset 0 0 0 1px var(--border);}
+  .tag{position:absolute;font-size:9px;text-transform:uppercase;letter-spacing:.08em;padding:3px 6px;border-radius:4px;}
+  .cam{top:10px;left:10px;background:rgba(0,0,0,.6);color:#fff;}
+  .alert{top:10px;right:10px;background:var(--danger-soft);border:1px solid var(--danger-line);color:var(--danger);}
+  .box{position:absolute;left:42%;top:26%;width:18%;height:54%;border:2px solid var(--danger);}
+  .boxlabel{position:absolute;top:-17px;left:0;background:var(--danger);color:#fff;font-size:9px;padding:1px 4px;white-space:nowrap;}
+  .pipe{position:absolute;bottom:9px;left:10px;font-size:9px;color:var(--muted-strong);}
+  .meta{position:absolute;bottom:9px;right:10px;font-size:9px;color:var(--muted);}
+  .reddot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--danger);margin-right:4px;}
+</style>
+</head>
+<body>
+  <div class="feed">
+    <div class="tag cam"><span class="reddot"></span>CAM-02 · REC</div>
+    <div class="tag alert">⚠ Stolen vehicle</div>
+    <div class="box"><span class="boxlabel">stolen bike · 0.94</span></div>
+    <div class="pipe">pipeline: motion → YOLO → claude-vision</div>
+    <div class="meta">1920×1080 · 30fps</div>
+  </div>
+</body>
+</html>

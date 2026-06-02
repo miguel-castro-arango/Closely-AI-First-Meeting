@@ -1,0 +1,95 @@
+/* ============================================================
+   CLOSELY — Sales Deck styles (built on colors_and_type.css)
+   ============================================================ */
+
+deck-stage:not(:defined){visibility:hidden;}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#05060c;}
+body{font-family:var(--font-sans);}
+
+/* ---- Slide base ---- */
+.slide{
+  /* deck-stage absolutely positions + sizes slides via ::slotted !important */
+  background:var(--bg);color:var(--fg);
+  padding:96px 120px;
+}
+.slide *{font-feature-settings:"ss01","cv11";}
+
+/* decorative background layers */
+.slide .bg-glow{position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(70% 50% at 50% -5%, rgba(59,130,246,0.16) 0%, transparent 60%),
+             radial-gradient(50% 40% at 88% 18%, rgba(99,102,241,0.12) 0%, transparent 60%);}
+.slide .bg-grid{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.32;
+  background-image:radial-gradient(circle at 1px 1px, rgba(255,255,255,0.045) 1px, transparent 0);
+  background-size:40px 40px;
+  -webkit-mask-image:radial-gradient(75% 70% at 50% 0%, #000 0%, transparent 90%);
+          mask-image:radial-gradient(75% 70% at 50% 0%, #000 0%, transparent 90%);}
+.slide .inner{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;}
+
+/* corner brand mark */
+.brandmark{position:absolute;top:44px;right:120px;z-index:2;font-family:var(--font-display);
+  font-weight:400;text-transform:uppercase;font-size:22px;letter-spacing:-.01em;color:var(--fg-strong);}
+.brandmark b{font-weight:400;color:var(--accent);margin-left:3px;}
+.pagenum{position:absolute;bottom:44px;right:120px;z-index:2;font-family:var(--font-mono);
+  font-size:18px;letter-spacing:.16em;color:var(--muted);}
+
+/* ---- Type helpers ---- */
+.kicker{font-family:var(--font-mono);text-transform:uppercase;letter-spacing:.22em;
+  font-size:18px;color:var(--accent);}
+.title{font-family:var(--font-display);text-transform:uppercase;font-weight:600;
+  letter-spacing:-.015em;line-height:1.02;color:var(--fg-strong);margin:0;}
+.t-xl{font-size:104px;}
+.t-lg{font-size:64px;}
+.t-md{font-size:48px;}
+.subtitle{font-family:var(--font-sans);font-size:24px;line-height:1.5;color:var(--muted-strong);margin:0;font-weight:400;}
+.source{font-family:var(--font-mono);font-size:18px;letter-spacing:.04em;color:var(--muted);}
+.gradient{background:var(--text-gradient);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;}
+
+/* ---- Cards ---- */
+.card{border:1px solid var(--border);background:rgba(17,19,32,0.88);border-radius:18px;
+  box-shadow:var(--shadow-card);}
+
+/* ---- Stat ---- */
+.stat-num{font-family:var(--font-display);font-weight:600;letter-spacing:-.03em;line-height:.92;}
+
+/* ============================================================
+   REVEAL ANIMATION SYSTEM
+   JS-driven: the slidechange handler adds .cl-on to each
+   [data-reveal] element with the correct delay. CSS handles
+   the transition from hidden → visible.
+   ============================================================ */
+
+/* Reveals are driven entirely by JS — no CSS transitions
+   (transitions freeze inside deck-stage's slotted context). */
+[data-reveal]{opacity:0;}
+[data-reveal="up"]{transform:translateY(28px);}
+[data-reveal="right"]{transform:translateX(44px);}
+[data-reveal="left"]{transform:translateX(-44px);}
+[data-reveal="scale"]{transform:scale(.92);}
+[data-reveal="fade"]{transform:none;}
+
+/* tension bar */
+.tension-fill{transform-origin:left center;transform:scaleX(0);}
+
+/* pulse dot */
+@keyframes cl-pulse-dot{0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,0.5);}50%{box-shadow:0 0 0 14px rgba(99,102,241,0);}}
+.pulse-dot.cl-on{animation:cl-pulse-dot 1.8s ease-out .4s 2;}
+
+/* chips */
+.chip{display:inline-flex;align-items:center;gap:8px;border-radius:9999px;padding:8px 16px;
+  font-family:var(--font-mono);font-size:18px;text-transform:uppercase;letter-spacing:.08em;}
+
+/* experience / client logo wordmarks */
+.wordmark{font-family:var(--font-sans);font-weight:600;font-size:24px;letter-spacing:.01em;color:var(--muted-strong);white-space:nowrap;}
+.logo-img{height:46px;width:auto;object-fit:contain;filter:grayscale(1) brightness(1.5);opacity:.82;}
+
+/* icon box */
+.ibox{display:grid;place-items:center;border-radius:12px;border:1px solid var(--border-strong);color:var(--accent);}
+.icon{width:26px;height:26px;stroke:currentColor;stroke-width:1.75;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.icon-sm{width:20px;height:20px;stroke:currentColor;stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+
+/* divider */
+.vrule{width:1px;background:linear-gradient(to bottom,transparent,var(--border-strong),transparent);}
+
+@media print{ .slide{page-break-after:always;} }

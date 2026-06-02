@@ -1,0 +1,220 @@
+/* ============================================================
+   CLOSELY — Design Tokens: Color + Type
+   AI agents for physical security operations.
+   Source of truth: Closely-AI-landing-page (globals.css, Tailwind v4 @theme)
+   ============================================================ */
+
+/* --- Fonts ---------------------------------------------------
+   Closely loads three Google Fonts via next/font:
+   - Geist        → UI / body (sans)
+   - Geist Mono   → labels, timestamps, camera IDs, terminal, stats
+   - Tomorrow     → display (headings, logo) — uppercase, techy geometric
+   Loaded here from the Google Fonts CDN (genuine families, not substitutes).
+------------------------------------------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tomorrow:wght@300;400;500;600&display=swap');
+
+:root {
+  /* ---- Surfaces (dark, near-black navy) ---- */
+  --bg:             #0A0B14;  /* page background */
+  --bg-elev:        #11131F;  /* elevated surfaces / cards */
+  --bg-card:        rgba(17, 19, 32, 0.6);  /* translucent card over glow */
+
+  /* ---- Foreground / text ---- */
+  --fg:             #E6E8EF;  /* body text */
+  --fg-strong:      #FFFFFF;  /* headings, emphasis */
+  --muted:          #8A8FA3;  /* secondary text, captions */
+  --muted-strong:   #B4B8C8;  /* lede paragraphs */
+
+  /* ---- Borders / hairlines ---- */
+  --border:         #1E2233;  /* default 1px hairline */
+  --border-strong:  #2A2F45;  /* hover / emphasized border */
+
+  /* ---- Brand accent (electric blue → indigo) ---- */
+  --accent:         #3B82F6;  /* primary blue */
+  --accent-2:       #6366F1;  /* indigo (gradient end) */
+  --accent-3:       #818CF8;  /* light indigo (text-gradient end) */
+  --accent-soft:    rgba(59, 130, 246, 0.12);
+
+  /* ---- Semantic status ---- */
+  --success:        #10B981;  /* validated, live, OK */
+  --danger:         #EF4444;  /* intrusion, critical alert */
+  --warn:           #F59E0B;  /* loitering, open door, "coming soon" */
+
+  /* ---- Status surface tints (10–20% over dark) ---- */
+  --success-soft:   rgba(16, 185, 129, 0.10);
+  --success-line:   rgba(16, 185, 129, 0.30);
+  --danger-soft:    rgba(239, 68, 68, 0.10);
+  --danger-line:    rgba(239, 68, 68, 0.30);
+  --warn-soft:      rgba(245, 158, 11, 0.10);
+  --warn-line:      rgba(245, 158, 11, 0.30);
+  --accent-line:    rgba(59, 130, 246, 0.30);
+
+  /* ---- Type families ---- */
+  --font-sans:    'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono:    'Geist Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --font-display: 'Tomorrow', 'Geist', ui-sans-serif, system-ui, sans-serif;
+
+  /* ---- Radii ---- */
+  --radius-sm:    4px;   /* mono tags, inline chips */
+  --radius-md:    8px;   /* list rows, small cards */
+  --radius-lg:    12px;  /* video frames, mockup panels */
+  --radius-card:  16px;  /* primary cards */
+  --radius-chrome:18px;  /* browser-chrome dashboard shell */
+  --radius-pill:  9999px;/* buttons, badges */
+
+  /* ---- Shadows / glows ---- */
+  --shadow-card:  0 1px 0 rgba(255,255,255,0.04) inset, 0 20px 40px -20px rgba(0,0,0,0.6);
+  --shadow-glow:  0 0 60px -10px rgb(59 130 246 / 0.35);   /* brand glow on primary CTAs */
+  --shadow-term:  0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 48px -24px rgba(0,0,0,0.7);
+  --ring-accent:  0 0 0 1px rgba(59,130,246,0.25), 0 0 40px -10px rgba(59,130,246,0.45);
+
+  /* ---- Gradients ---- */
+  --brand-gradient: linear-gradient(90deg, #3B82F6 0%, #6366F1 100%);
+  --text-gradient:  linear-gradient(90deg, #3B82F6 0%, #818CF8 100%);
+  --radial-fade:    radial-gradient(80% 50% at 50% 0%, rgba(59,130,246,0.18) 0%, transparent 60%),
+                    radial-gradient(60% 40% at 80% 30%, rgba(99,102,241,0.12) 0%, transparent 60%);
+
+  /* ---- Spacing scale (Tailwind-derived, used throughout) ---- */
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 20px; --space-6: 24px; --space-8: 32px; --space-10: 40px;
+  --space-12: 48px; --space-16: 64px; --space-24: 96px;
+}
+
+/* ============================================================
+   SEMANTIC TYPE STYLES
+   H1/H2 use the display face, UPPERCASE. Body uses Geist.
+   Section titles & H1 are set semibold + tight tracking in product,
+   overriding the display face's default 400 weight.
+   ============================================================ */
+
+.cl-display,
+h1.cl, h2.cl {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  color: var(--fg-strong);
+}
+
+/* Hero / page title — 72px desktop */
+.cl-h1 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--fg-strong);
+}
+
+/* Section heading — 44px desktop */
+.cl-h2 {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--fg-strong);
+}
+
+/* Sub-heading / agent name — sentence case, display face */
+.cl-h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(22px, 2.5vw, 32px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--fg-strong);
+}
+
+/* Card title */
+.cl-h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.3;
+  color: var(--fg-strong);
+}
+
+/* Eyebrow — the mono kicker above section titles */
+.cl-eyebrow {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+}
+
+/* Lede paragraph under a heading */
+.cl-lede {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: clamp(16px, 1.4vw, 18px);
+  line-height: 1.6;
+  color: var(--muted-strong);
+}
+
+/* Body */
+.cl-body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--fg);
+}
+
+.cl-body-sm {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted-strong);
+}
+
+/* Mono — labels, timestamps, camera IDs, pipeline, terminal */
+.cl-mono {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+}
+
+.cl-mono-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+/* Big stat number — uses the brand text-gradient */
+.cl-stat {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(40px, 6vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+/* Gradient text helper */
+.cl-text-gradient {
+  background: var(--text-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* ============================================================
+   UTILITY BACKGROUNDS
+   ============================================================ */
+.cl-bg-grid {
+  background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.04) 1px, transparent 0);
+  background-size: 32px 32px;
+}
+.cl-bg-radial-fade { background: var(--radial-fade); }
+.cl-bg-brand-gradient { background: var(--brand-gradient); }
+
+::selection { background: var(--accent); color: var(--fg-strong); }

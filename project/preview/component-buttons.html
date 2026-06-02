@@ -1,0 +1,33 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-sans);padding:28px 30px;}
+  .row{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:9999px;font-weight:500;letter-spacing:-0.01em;cursor:pointer;border:none;transition:all .2s;}
+  .lg{height:48px;padding:0 24px;font-size:16px;}
+  .md{height:40px;padding:0 16px;font-size:14px;}
+  .primary{background:var(--brand-gradient);color:#fff;box-shadow:var(--shadow-glow);}
+  .primary:hover{filter:brightness(1.1);}
+  .secondary{background:rgba(17,19,32,0.6);color:var(--fg);border:1px solid var(--border-strong);}
+  .secondary:hover{border-color:var(--accent-line);}
+  .ghost{background:transparent;color:var(--muted);}
+  .ghost:hover{color:var(--fg);background:rgba(17,19,32,0.4);}
+  .tag{font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-top:16px;text-transform:uppercase;letter-spacing:.12em;}
+  svg{width:16px;height:16px;}
+</style>
+</head>
+<body>
+  <div class="row">
+    <button class="btn primary lg">Book demo <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></button>
+    <button class="btn secondary lg">See how it works</button>
+    <button class="btn ghost lg">See how it works <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg></button>
+    <button class="btn primary md">Review</button>
+  </div>
+  <div class="tag">Pill · Geist 500 · primary = brand-gradient + glow, hover brightness-110 · active brightness-95</div>
+</body>
+</html>

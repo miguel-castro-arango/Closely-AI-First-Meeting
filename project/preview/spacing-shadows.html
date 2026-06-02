@@ -1,0 +1,24 @@
+<!-- @dsCard group="Spacing" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--fg);font-family:var(--font-mono);padding:30px 28px;}
+  .row{display:flex;gap:30px;align-items:center;}
+  .box{width:150px;height:62px;border-radius:14px;background:var(--bg-elev);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);}
+  .glow{background:var(--brand-gradient);color:#fff;border:none;}
+  .name{font-size:10px;color:var(--fg-strong);margin-top:9px;}
+</style>
+</head>
+<body>
+  <div class="row">
+    <div><div class="box" style="box-shadow:var(--shadow-card);">card</div><div class="name">shadow-card</div></div>
+    <div><div class="box" style="box-shadow:var(--shadow-term);">terminal</div><div class="name">shadow-term</div></div>
+    <div><div class="box glow" style="box-shadow:var(--shadow-glow);">CTA</div><div class="name">shadow-glow</div></div>
+    <div><div class="box" style="box-shadow:var(--ring-accent);">ring</div><div class="name">ring-accent</div></div>
+  </div>
+</body>
+</html>
