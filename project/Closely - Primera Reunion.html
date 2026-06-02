@@ -226,7 +226,11 @@
        & bottom; some print pipelines clip that. Let the orbit area + slide
        overflow show so the full circle prints. */
     .orbit-wrap{overflow:visible !important;}
-    .orbit-ring{opacity:.9 !important;}
+    /* the ring border is a near-black hairline (#1E2233) that washes out on a
+       dark printed background — give it a clearly visible accent stroke so
+       both rings render in the PDF. */
+    .orbit-ring{opacity:1 !important;border-color:rgba(99,102,241,0.55) !important;
+      box-shadow:none !important;}
     /* the timeline base line is drawn with scaleX — keep it full width */
     .mat-line{transform:translateY(-50%) scaleX(1) !important;}
     /* the tension fill (slide-2 legacy) and pulse dots, if present */
