@@ -201,6 +201,33 @@
     .slide[data-deck-active] .orbit-core,.slide[data-deck-active] .orbit-ring,
     .slide[data-deck-active] .orbit-icon,.slide[data-deck-active] .orbit-label{animation:none;opacity:1;}
   }
+
+  /* ── Print / PDF export ───────────────────────────────────────────────
+     On screen, reveal/animation elements start at opacity:0 and only become
+     visible once their slide is navigated to (gets [data-deck-active]). When
+     exporting to PDF every slide is laid out at once, but only the active one
+     was ever revealed — the rest export blank. Force ALL animated/hidden
+     content fully visible and static for print so every slide renders. */
+  @media print{
+    [data-reveal],
+    .mat-col, .mat-line,
+    .orbit-core, .orbit-ring, .orbit-icon, .orbit-label,
+    .slide:not([data-deck-active]) .orbit-core,
+    .slide:not([data-deck-active]) .orbit-ring,
+    .slide:not([data-deck-active]) .orbit-icon,
+    .slide:not([data-deck-active]) .orbit-label,
+    .slide:not([data-deck-active]) .mat-col,
+    .slide:not([data-deck-active]) .mat-line{
+      opacity:1 !important;
+      transform:none !important;
+      animation:none !important;
+      transition:none !important;
+    }
+    /* the timeline base line is drawn with scaleX — keep it full width */
+    .mat-line{transform:translateY(-50%) scaleX(1) !important;}
+    /* the tension fill (slide-2 legacy) and pulse dots, if present */
+    .tension-fill{transform:scaleX(1) !important;}
+  }
 </style>
 </head>
 <body>
